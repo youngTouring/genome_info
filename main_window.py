@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 import reportlab.platypus
 from plot_window import *
 from table_model import *
-from PIL import Image
 import time, datetime
 import pandas as pd
 import subprocess
@@ -226,7 +225,7 @@ class MyForm(QMainWindow, QScrollArea):
                 doc = SimpleDocTemplate(file, pagesize=letter,
                                         rightMargin=25, leftMargin=25,
                                         topMargin=25, bottomMargin=18)
-                logo = 'C:/Users/miko5/Desktop/TDS/Project/icons/dna_icon_132453.ico'
+                logo = 'C:/Users/miko5/Desktop/TDS/genome-info/icons/dna_icon_132453.ico'
 
                 Story = []
                 img = reportlab.platypus.Image(filename = logo, height = 0.5 * inch, width = 0.5 * inch, hAlign='RIGHT')
