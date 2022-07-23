@@ -39,11 +39,15 @@ class MyPlotDialog(QDialog,QMainWindow):
         self.items = []
 
     def clear_data(self):
-        '''Clears table of data'''
+        """
+        :return: clears data from widget with selected featrures from table
+        """
         self.ui.tableWidgetSelectedDataForPlot.clear()
         
     def search_for_plot(self):
-        '''Filters data for plott by organism nama or BioProject id'''
+        """
+        :return: filters data for plott by organism nama or BioProject id
+        """
         try:
             self.find = self.ui.lineEditDataForPlot.text()
             try:
@@ -59,7 +63,9 @@ class MyPlotDialog(QDialog,QMainWindow):
                 self.ui.tableWidgetSelectedDataForPlot.setColumnCount(numcols)
                 self.ui.tableWidgetSelectedDataForPlot.setRowCount(numrows)
                 self.ui.tableWidgetSelectedDataForPlot.setHorizontalHeaderLabels(self.data.columns)
-                '''Sends search result to the table'''
+
+                # sends search result to the table
+
                 for row in range(numrows):
                     for column in range(numcols):
                         self.ui.tableWidgetSelectedDataForPlot.setItem(row, column, QTableWidgetItem(
@@ -71,7 +77,9 @@ class MyPlotDialog(QDialog,QMainWindow):
             QMessageBox.critical(self, 'Error', e)
 
     def add_data(self):
-        '''Adds data to the list'''
+        """
+        :return: adds data to the list
+        """
         try:
             if len(self.item) > 0:
                 self.ui.listWidget.clear()
@@ -80,13 +88,15 @@ class MyPlotDialog(QDialog,QMainWindow):
                 for i in range(len(self.items)):
                     self.ui.listWidget.addItem(self.items[i])
             else:
-                '''If data was deleted or user did not searched for more return error'''
+                # if data was deleted or user did not searched for more return error
                 QMessageBox.information(self,'Info','Please search for data again')
         except Exception as e:
             QMessageBox.critical(self,'Error',f'Something went wrong: {e}')
 
     def delete_data(self):
-        '''Deletes data from the list'''
+        """
+        :return: deletes data from the list
+        """
         try:
             if len(self.items) !=  0:
                 self.tabConcat.clear()
@@ -95,13 +105,15 @@ class MyPlotDialog(QDialog,QMainWindow):
                 self.dane_melted = None
                 self.ui.listWidget.clear()
             else:
-                '''If there is no data to delete return info'''
+                # if there is no data to delete return info
                 QMessageBox.information(self,'Info','No data to remove')
         except Exception as e:
             QMessageBox.critical(self,'Error',f'Something went wrong: {e}')
 
     def paste_list(self):
-        '''Pastes organism names from the list to describe it'''
+        """
+        :return: pastes organism names from the list to describe it
+        """
         if len(self.items) > 0:
             dataText = ', '.join(self.items)
             self.ui.textEdit.append(dataText)
@@ -109,7 +121,9 @@ class MyPlotDialog(QDialog,QMainWindow):
             QMessageBox.information(self,'Info','No data to paste')
 
     def plot(self):
-        '''Data plot creation'''
+        """
+        :return: creates data plot
+        """
         try:
             self.header = self.tab[0]
             self.dataForPlot = pd.DataFrame(self.tabConcat,columns=self.header)
@@ -117,7 +131,7 @@ class MyPlotDialog(QDialog,QMainWindow):
             headersNames = self.dataForPlot.columns.values.tolist()
             self.valuesToConvert = []
 
-            '''Converts data to float'''
+            # converts data to float
 
             for i in headersNames:
                 for j in self.dataNames:
@@ -127,7 +141,7 @@ class MyPlotDialog(QDialog,QMainWindow):
                 self.dataForPlot[i] = self.dataForPlot[i].astype(float)
             dataPlot = self.dataForPlot[self.valuesToConvert]
 
-            '''Dynamic dataframe creation for plot'''
+            # dynamic dataframe creation for plot
 
             dataPlot.insert(0, 'Organism_name', organism_names_for_plot, True)
             dataPlot['Size(Kb)'] = dataPlot['Size(Mb)'] * 1000
@@ -135,7 +149,7 @@ class MyPlotDialog(QDialog,QMainWindow):
             self.dane_melted = dataPlot.melt("Organism_name", var_name="Organism", value_name="Value")
             plt.figure()
 
-            '''Shows plot in QLabel'''
+            # shows plot in QLabel
 
             self.plot = sns.barplot(data=self.dane_melted, x='Organism', y='Value', hue="Organism_name")
             self.PlotFile = 'plot.png'

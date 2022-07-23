@@ -55,11 +55,15 @@ class MyForm(QMainWindow, QScrollArea):
         self.show()
 
     def open_downloading_dialog(self):
-        '''Opens downloading dialog'''
+        """
+        :return: opens downloading dialog
+        """
         self.dialog.show()
         
     def open_plot_window(self):
-        '''Opens plotting dialog. In case of lack of data return error'''
+        """
+        :return:opens plotting dialog. In case of lack of data return error
+        """
         try:
             self.plotCreator.dataFromDatabase = self.df_new
             self.plotCreator.show()
@@ -67,7 +71,9 @@ class MyForm(QMainWindow, QScrollArea):
             QMessageBox.critical(self,'Error','No data to plot. Load database first')
 
     def add_chart_to_workspace(self):
-        '''Adds plot from plotting dialog to main window'''
+        """
+        :return: adds plot from plotting dialog to main window
+        """
         try:
             self.ui.labelPlottoWorkspace.setPixmap(self.plotCreator.plot_png)
             text = self.plotCreator.ui.textEdit.toPlainText()
@@ -76,7 +82,9 @@ class MyForm(QMainWindow, QScrollArea):
             QMessageBox.critical(self,'Error',f'Something went wrong: {e}')
 
     def open_file(self):
-        '''Opens .csv database file'''
+        """
+        :return: opens .csv database file
+        """
         if self.plotCreator.isVisible():
             self.plotCreator.close()
         try:
@@ -97,11 +105,13 @@ class MyForm(QMainWindow, QScrollArea):
                 self.ui.labelDatabaseSizeInfo.setText(f'Database size: {numcols - 1} columns, {numrows} rows')
                 QMessageBox.information(self,'Info','Database successfully loaded!')
         except Exception as e:
-            '''In case of incorrect file extension return error'''
+            # In case of incorrect file extension return error
             QMessageBox.critical(self,'Error','Chose correct file extension: csv')
 
     def search_in_database(self):
-        '''Filters data for table by organism name or BioProject id'''
+        """
+        :return: filters data for table by organism name or BioProject id
+        """
         try:
             if self.data_loaded:
                 searchText = self.ui.lineEditSearchInDatabase.text()
@@ -128,15 +138,18 @@ class MyForm(QMainWindow, QScrollArea):
             QMessageBox.warning(self, 'Warning', e)
 
     def get_clicked_cell(self, row, column):
-        '''When cell clicked, copy content to LineEdit below'''
+        """
+        :param row: vertical position of clicked cell
+        :param column: horizotnal position of clicked cell
+        :return: when cell is clicked, copy content to LineEdit below
+        """
         item_from_table = self.ui.tableWidgetSelectedData.item(row,column).text()
         self.ui.lineEditSelectedForQuery.setText(item_from_table)
 
     def search_in_entrez(self):
-        '''
-           Sends query to chosen Entrez databse. Possible databases:
-           nucleotide, assemble, BioProject
-        '''
+        """
+        :return: sends query to chosen Entrez databse. Possible databases: nucleotide, assemble, BioProject
+        """
         chosenEntrezDatabase = self.ui.comboBoxWhichDatabase.itemText(self.ui.comboBoxWhichDatabase.currentIndex()).lower()
         try:
             Entrez.email = f"{self.ui.lineEditEntrezEmail.text()}"
@@ -148,15 +161,18 @@ class MyForm(QMainWindow, QScrollArea):
             self.queryTranslated = SeqIO.read(handle,'genbank')
             handle = Entrez.efetch(db="nucleotide",id=result["IdList"],rettype="gb")
             self.queryResult = handle.read()
-            '''Sends query result to TextEdit below'''
+
+            # sends query result to TextEdit below
             self.ui.textEditQueryResult.setText(self.queryResult)
             handle.close()
         except Exception as c:
-            '''In case of incorrect query return error'''
+            # In case of incorrect file extension return error
             QMessageBox.critical(self,'Error',f'Wrong query: {c}.\nTry to use another database for this query')
 
     def save_query_result_to_txt(self):
-        '''Saves data to .txt file'''
+        """
+        :return: saves data to .txt file
+        """
         try:
             if len(self.queryResult) > 0:
                 file,_ = QFileDialog.getSaveFileName(self, "Save file","","All files (*);;TXT files (*.txt)")
@@ -164,11 +180,13 @@ class MyForm(QMainWindow, QScrollArea):
                     saving = open(file,'w')
                     saving.write(self.queryResult)
         except Exception as e:
-            '''In case of lack of data retur  error'''
+            # In case of incorrect file extension return error
             QMessageBox.information(self, 'Info',f'No data to export. Please send query\n''to receive data')
 
     def load_from_txt(self):
-        '''Loads data from .txt file'''
+        """
+        :return: loads data from .txt file
+        """
         try:
             file, _ = QFileDialog.getOpenFileName(self,"Open file","","All files (*);;TXT files (*.txt)")
             if file:
@@ -178,7 +196,7 @@ class MyForm(QMainWindow, QScrollArea):
                         data = f.read()
                     self.ui.textEditQueryResult.setText(data)
                 except Exception as e:
-                    '''In case of incorrect file extension return error'''
+                    # In case of incorrect file extension return error
                     QMessageBox.critical(self,'Error',f'Wrong file extension: {e}')
         except Exception as e:
             QMessageBox.show(self,'Info','Something went wrong. Try to load file again')
@@ -187,6 +205,9 @@ class MyForm(QMainWindow, QScrollArea):
     ### Report generation
     ########################
     def add_amino_percentage(self):
+        """
+        :return: generates plot with amino percentage from entrez query
+        """
         try:
             data = []
             nucleotides = ['A','T','C','G']
@@ -212,11 +233,11 @@ class MyForm(QMainWindow, QScrollArea):
             QMessageBox.critical(self,'Error',f'No data! {e}')
 
     def generate_report(self):
-        '''
-        Generates report as a .pdf extension file. Data: report id, date&time of report generation
-        entrez query results, plots: nucleotide percentage of organism from query
-        and plot which comes from MyPlotDialog class
-        '''
+        """
+        :return: Generates report as a .pdf extension file. Data: report id, date&time of report generation,
+                 entrez query results, plots: nucleotide percentage of organism from query
+                 and plot from MyPlotDialog class.
+        """
         try:
             org_name = '_'.join(self.queryTranslated.annotations["organism"].split())
             file, _ = QFileDialog.getSaveFileName(self, "Save file",f'{self.file_name_nocsv[0]}_{org_name}',
@@ -273,7 +294,9 @@ class MyForm(QMainWindow, QScrollArea):
             QMessageBox.critical(self,'Error',f'Something went wrong: {e}')
 
     def help(self):
-        '''Open .pdf document with user guide'''
+        """
+        :return: opens .pdf document "Help.pdf" with user guide
+        """
         help_document = 'Help.pdf'
         subprocess.Popen([help_document],shell=True)
 

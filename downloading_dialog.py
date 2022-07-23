@@ -26,21 +26,26 @@ class MyDialog(QDialog):
                                      'Viruses':viruses,'Plasmids':plasmids}
 
     def download_csv(self,url,file):
-        '''Downloads and save in .csv file'''
+        """
+        :param url: address of database
+        :param file: specififed file name by user
+        :return: saves downloaded database as csv file
+        """
         req = requests.get(url)
         url_content = req.content
         csv_file = open(file, 'wb')
         csv_file.write(url_content)
         csv_file.close()
-        self.thread[1].stop()
+        # self.thread[1].stop()
 
-    def download_database_window(self):
-        '''Starts downloading thread'''
-        self.thread[1] = ThreadClass(parent = None, index = 1)
-        self.thread[1].start()
+    def download_database_window(self) -> None:
+        """
+        :return: dowloads chosen database
+        """
+        # self.thread[1] = ThreadClass(parent = None, index = 1)
+        # self.thread[1].start()
         self.ui.labelDownloadedInfo.clear()
         try:
-            '''Download chosen database'''
             chosenOption = self.ui.comboBoxDatabases.itemText(self.ui.comboBoxDatabases.currentIndex())
             file, _ = QFileDialog.getSaveFileName(self, "Save file",
                                                    f"{chosenOption}",
