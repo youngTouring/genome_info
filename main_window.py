@@ -17,6 +17,7 @@ import subprocess
 import Bio
 import uuid
 import sys
+import traceback
 
 ##############################################################################
 ### MyForm class - application's main class. Responsible for exposing ########
@@ -33,7 +34,7 @@ class MyForm(QMainWindow, QScrollArea):
         self.ui.setupUi(self)
 
         self.ui.actionDownloadDatabase.triggered.connect(self.open_downloading_dialog)
-        self.ui.actionOpenDatabase.triggered.connect(self.open_file)
+        self.ui.actionOpenDatabase.triggered.connect(self.open_database)
         self.ui.actionGenerete_plot.triggered.connect(self.open_plot_window)
         self.ui.actionGenerate_report.triggered.connect(self.generate_report)
         self.ui.actionHelp.triggered.connect(self.help)
@@ -81,7 +82,7 @@ class MyForm(QMainWindow, QScrollArea):
         except Exception as e:
             QMessageBox.critical(self,'Error',f'Something went wrong: {e}')
 
-    def open_file(self):
+    def open_database(self):
         """
         :return: opens .csv database file
         """
@@ -140,7 +141,7 @@ class MyForm(QMainWindow, QScrollArea):
     def get_clicked_cell(self, row, column):
         """
         :param row: vertical position of clicked cell
-        :param column: horizotnal position of clicked cell
+        :param column: horizontal position of clicked cell
         :return: when cell is clicked, copy content to LineEdit below
         """
         item_from_table = self.ui.tableWidgetSelectedData.item(row,column).text()
@@ -179,6 +180,7 @@ class MyForm(QMainWindow, QScrollArea):
                 if file:
                     saving = open(file,'w')
                     saving.write(self.queryResult)
+                    saving.close()
         except Exception as e:
             # In case of incorrect file extension return error
             QMessageBox.information(self, 'Info',f'No data to export. Please send query\n''to receive data')
@@ -195,6 +197,7 @@ class MyForm(QMainWindow, QScrollArea):
                     with open(file,'r') as f:
                         data = f.read()
                     self.ui.textEditQueryResult.setText(data)
+                    f.close()
                 except Exception as e:
                     # In case of incorrect file extension return error
                     QMessageBox.critical(self,'Error',f'Wrong file extension: {e}')
@@ -291,7 +294,7 @@ class MyForm(QMainWindow, QScrollArea):
                 Story.append(Paragraph(notes, styles["Normal"]))
                 doc.build(Story)
         except Exception as e:
-            QMessageBox.critical(self,'Error',f'Something went wrong: {e}')
+            QMessageBox.critical(self,'Error',f'Something went wrong: {traceback.format_exc()}')
 
     def help(self):
         """
