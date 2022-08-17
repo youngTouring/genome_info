@@ -14,12 +14,12 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(483, 282)
+        Dialog.resize(370, 210)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("database_theapplication_3365.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         Dialog.setWindowIcon(icon)
         self.layoutWidget = QtWidgets.QWidget(Dialog)
-        self.layoutWidget.setGeometry(QtCore.QRect(20, 10, 441, 251))
+        self.layoutWidget.setGeometry(QtCore.QRect(20, 10, 331, 181))
         self.layoutWidget.setObjectName("layoutWidget")
         self.gridLayout = QtWidgets.QGridLayout(self.layoutWidget)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
@@ -33,6 +33,7 @@ class Ui_Dialog(object):
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.label = QtWidgets.QLabel(self.layoutWidget)
+        self.label.setMaximumSize(QtCore.QSize(16777215, 20))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.label.setFont(font)
@@ -77,7 +78,7 @@ class Ui_Dialog(object):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Download database"))
         self.pushButtonStartDownload.setText(_translate("Dialog", "Download"))
-        self.label.setText(_translate("Dialog", "<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Which database would you like to download?</span></p></body></html>"))
+        self.label.setText(_translate("Dialog", "<html><head/><body><p>Which database would you like to download?</p></body></html>"))
         self.comboBoxDatabases.setItemText(0, _translate("Dialog", "Overview"))
         self.comboBoxDatabases.setItemText(1, _translate("Dialog", "Organelles"))
         self.comboBoxDatabases.setItemText(2, _translate("Dialog", "Eucaryota"))
