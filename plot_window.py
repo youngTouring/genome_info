@@ -164,3 +164,4 @@ if __name__ == "__main__":
     w = MyPlotDialog()
     w.show()
     sys.exit(app.exec_())
+    
