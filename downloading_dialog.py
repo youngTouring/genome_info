@@ -25,7 +25,7 @@ class MyDialog(QDialog):
                                      'Eucaryota':eucaryotes,'Procaryota':procaryotes,
                                      'Viruses':viruses,'Plasmids':plasmids}
 
-    def download_csv(self,url,file):
+    def download_csv(self,url,file) -> None:
         """
         :param url: address of database
         :param file: specififed file name by user
@@ -46,12 +46,12 @@ class MyDialog(QDialog):
         # self.thread[1].start()
         self.ui.labelDownloadedInfo.clear()
         try:
-            chosenOption = self.ui.comboBoxDatabases.itemText(self.ui.comboBoxDatabases.currentIndex())
+            chosen_option = self.ui.comboBoxDatabases.itemText(self.ui.comboBoxDatabases.currentIndex())
             file, _ = QFileDialog.getSaveFileName(self, "Save file",
-                                                   f"{chosenOption}",
+                                                   f"{chosen_option}",
                                                    "All files (*);;CSV files (*.csv)")
             if file:
-                url = self.adresses_radio_check[chosenOption]
+                url = self.adresses_radio_check[chosen_option]
                 self.download_csv(url,file)
                 self.ui.labelDownloadedInfo.setText(f'{self.ui.comboBoxDatabases.itemText(self.ui.comboBoxDatabases.currentIndex())} database'
                                                     f' successfully downloaded')

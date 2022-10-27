@@ -1,33 +1,27 @@
-from PyQt5.QtWidgets import QApplication, QTableWidgetItem, QMainWindow, QScrollArea, QFileDialog,QMessageBox, QLabel
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.enums import TA_JUSTIFY
-from reportlab.lib.pagesizes import letter
-from reportlab.lib.units import inch
-from Bio import Entrez, SeqIO, Seq
-from main_window_layout import *
-from downloading_dialog import *
-import matplotlib.pyplot as plt
-import reportlab.platypus
-from plot_window import *
-from table_model import *
-import time, datetime
-import pandas as pd
+import datetime
 import subprocess
-import Bio
-import uuid
 import sys
 import traceback
+import uuid
 
-##############################################################################
-### MyForm class - application's main class. Responsible for exposing ########
-### database view, sending queries to Entrez database, saving data to ########
-### file, loading data from file, and exposing plot view from MyPlotDialog ###
-### class ####################################################################
-##############################################################################
+import pandas as pd
+import reportlab.platypus
+from reportlab.lib.enums import TA_JUSTIFY
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import SimpleDocTemplate
+from Bio import Entrez, SeqIO, Seq
+from PyQt5.QtWidgets import QApplication, QTableWidgetItem, QMainWindow, QScrollArea, QFileDialog, QMessageBox, QLabel
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.units import inch
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
+
+from downloading_dialog import *
+from plot_window import *
+from table_model import *
+from main_window_layout import *
+
 
 class MyForm(QMainWindow, QScrollArea):
-
     def __init__(self):
         super().__init__()
         self.ui = Ui_MainWindow()
@@ -45,69 +39,76 @@ class MyForm(QMainWindow, QScrollArea):
         self.ui.pushButtonLoadFromTxt.clicked.connect(self.load_from_txt)
 
         self.ui.tableWidgetSelectedData.cellClicked.connect(self.get_clicked_cell)
-        self.queryResult = ''
-        self.queryTranslated = ''
+        self.query_result = ''
+        self.query_translated = ''
         self.data_loaded = False
         self.dialog = MyDialog()
-        self.plotCreator = MyPlotDialog()
-        self.plotCreator.ui.pushButtonAddToWorkspace.clicked.connect(self.add_chart_to_workspace)
-        self.file_name_nocsv = ''
+        self.plot_creator = MyPlotDialog()
+        self.plot_creator.ui.pushButtonAddToWorkspace.clicked.connect(self.add_chart_to_workspace)
+        self.file_name_no_csv = ''
         self.thread = {}
         self.show()
+
+    @staticmethod
+    def help():
+        """
+        :return: opens .pdf document "Help.pdf" with user guide
+        """
+        help_document = 'Help.pdf'
+        subprocess.Popen([help_document], shell=True)
 
     def open_downloading_dialog(self):
         """
         :return: opens downloading dialog
         """
         self.dialog.show()
-        
+
     def open_plot_window(self):
         """
         :return:opens plotting dialog. In case of lack of data return error
         """
         try:
-            self.plotCreator.dataFromDatabase = self.df_new
-            self.plotCreator.show()
+            self.plot_creator.data_from_database = self.df_new
+            self.plot_creator.show()
         except Exception as e:
-            QMessageBox.critical(self,'Error','No data to plot. Load database first')
+            QMessageBox.critical(self, 'Error', 'No data to plot. Load database first')
 
     def add_chart_to_workspace(self):
         """
         :return: adds plot from plotting dialog to main window
         """
         try:
-            self.ui.labelPlottoWorkspace.setPixmap(self.plotCreator.plot_png)
-            text = self.plotCreator.ui.textEdit.toPlainText()
+            self.ui.labelPlottoWorkspace.setPixmap(self.plot_creator.plot_png)
+            text = self.plot_creator.ui.textEdit.toPlainText()
             self.ui.textEditNoteForPlot.setText(text)
         except Exception as e:
-            QMessageBox.critical(self,'Error',f'Something went wrong: {e}')
+            QMessageBox.critical(self, 'Error', f'Something went wrong: {e}')
 
     def open_database(self):
         """
         :return: opens .csv database file
         """
-        if self.plotCreator.isVisible():
-            self.plotCreator.close()
+        if self.plot_creator.isVisible():
+            self.plot_creator.close()
         try:
-            file, _ = QFileDialog.getOpenFileName(self,"Open file","","All files (*);;CSV files (*.csv)")
+            file, _ = QFileDialog.getOpenFileName(self, "Open file", "", "All files (*);;CSV files (*.csv)")
             if file:
                 dane = pd.read_csv(file, keep_default_na=False)
                 self.df_new = pd.DataFrame(dane)
-                self.df_new.rename(columns = {'#Organism Name': 'Organism_name'}, inplace=True)
-                self.df_new.sort_values(by = ['Organism_name'], ascending = True, inplace=True)
-                self.df_new.insert(0,'Index',[i for i in range(1,self.df_new.shape[0] + 1)],True)
+                self.df_new.rename(columns={'#Organism Name': 'Organism_name'}, inplace=True)
+                self.df_new.sort_values(by=['Organism_name'], ascending=True, inplace=True)
+                self.df_new.insert(0, 'Index', [i for i in range(1, self.df_new.shape[0] + 1)], True)
                 self.data_loaded = True
-                numrows, numcols = self.df_new.shape
-                dane_tab = TabelaModel(self.df_new)
-                self.ui.tableView.setModel(dane_tab)
+                num_rows, num_cols = self.df_new.shape
+                data_tab = TabelaModel(self.df_new)
+                self.ui.tableView.setModel(data_tab)
                 file_name = str(file).split('/')
-                self.file_name_nocsv = file_name[-1].split('.')
-                self.ui.labelDataName.setText('Data view ' + self.file_name_nocsv[0])
-                self.ui.labelDatabaseSizeInfo.setText(f'Database size: {numcols - 1} columns, {numrows} rows')
-                QMessageBox.information(self,'Info','Database successfully loaded!')
+                self.file_name_no_csv = file_name[-1].split('.')
+                self.ui.labelDataName.setText('Data view ' + self.file_name_no_csv[0])
+                self.ui.labelDatabaseSizeInfo.setText(f'Database size: {num_cols - 1} columns, {num_rows} rows')
+                QMessageBox.information(self, 'Info', 'Database successfully loaded!')
         except Exception as e:
-            # In case of incorrect file extension return error
-            QMessageBox.critical(self,'Error','Chose correct file extension: csv')
+            QMessageBox.critical(self, 'Error', 'Chose correct file extension: csv')
 
     def search_in_database(self):
         """
@@ -115,26 +116,27 @@ class MyForm(QMainWindow, QScrollArea):
         """
         try:
             if self.data_loaded:
-                searchText = self.ui.lineEditSearchInDatabase.text()
+                search_text = self.ui.lineEditSearchInDatabase.text()
                 data_from_database = pd.DataFrame()
                 try:
                     if "BioProject" in self.df_new:
                         data_from_database = pd.DataFrame(self.df_new.query(
-                                f'Organism_name == ["{searchText}"] or BioProject == ["{searchText}"]'))
+                            f'Organism_name == ["{search_text}"] or BioProject == ["{search_text}"]'))
                     else:
                         data_from_database = pd.DataFrame(self.df_new.query(
-                            f'Organism_name == ["{searchText}"]'))
-                    numrows, numcols = data_from_database.shape
-                    self.ui.tableWidgetSelectedData.setColumnCount(numcols)
-                    self.ui.tableWidgetSelectedData.setRowCount(numrows)
+                            f'Organism_name == ["{search_text}"]'))
+                    num_rows, num_cols = data_from_database.shape
+                    self.ui.tableWidgetSelectedData.setColumnCount(num_cols)
+                    self.ui.tableWidgetSelectedData.setRowCount(num_rows)
                     self.ui.tableWidgetSelectedData.setHorizontalHeaderLabels(data_from_database.columns)
-                    '''Send search result to the table'''
-                    for row in range(numrows):
-                        for column in range(numcols):
-                            self.ui.tableWidgetSelectedData.setItem(row, column, QTableWidgetItem(str(data_from_database.iloc[row, column])))
-                    self.ui.labelNumbeOfRows.setText('Number of results: ' + str(self.ui.tableWidgetSelectedData.rowCount()))
+                    for row in range(num_rows):
+                        for column in range(num_cols):
+                            self.ui.tableWidgetSelectedData.setItem(row, column, QTableWidgetItem(
+                                str(data_from_database.iloc[row, column])))
+                    self.ui.labelNumbeOfRows.setText(
+                        'Number of results: ' + str(self.ui.tableWidgetSelectedData.rowCount()))
                 except Exception:
-                    QMessageBox.information(self,'Info','Try to search for another data')
+                    QMessageBox.information(self, 'Info', 'Try to search for another data')
         except Exception as e:
             QMessageBox.warning(self, 'Warning', e)
 
@@ -144,106 +146,102 @@ class MyForm(QMainWindow, QScrollArea):
         :param column: horizontal position of clicked cell
         :return: when cell is clicked, copy content to LineEdit below
         """
-        item_from_table = self.ui.tableWidgetSelectedData.item(row,column).text()
+        item_from_table = self.ui.tableWidgetSelectedData.item(row, column).text()
         self.ui.lineEditSelectedForQuery.setText(item_from_table)
 
     def search_in_entrez(self):
         """
         :return: sends query to chosen Entrez databse. Possible databases: nucleotide, assemble, BioProject
         """
-        chosenEntrezDatabase = self.ui.comboBoxWhichDatabase.itemText(self.ui.comboBoxWhichDatabase.currentIndex()).lower()
+        chosen_entrez_database = self.ui.comboBoxWhichDatabase.itemText(
+            self.ui.comboBoxWhichDatabase.currentIndex()).lower()
         try:
             Entrez.email = f"{self.ui.lineEditEntrezEmail.text()}"
             query = f"{self.ui.lineEditSelectedForQuery.text()}"
-            handle = Entrez.esearch(db=f'{chosenEntrezDatabase}',term=query,idtype='acc',retmax=5)
+            handle = Entrez.esearch(db=f"{chosen_entrez_database}", term=query, idtype='acc', retmax=5)
             result = Entrez.read(handle)
-            handle = Entrez.efetch(db="nucleotide",id=result["IdList"],rettype="fasta")
-            handle = Entrez.efetch(db="nucleotide",id=result["IdList"][0],rettype="gb")
-            self.queryTranslated = SeqIO.read(handle,'genbank')
-            handle = Entrez.efetch(db="nucleotide",id=result["IdList"],rettype="gb")
-            self.queryResult = handle.read()
+            handle = Entrez.efetch(db=f"{chosen_entrez_database}", id=result["IdList"], rettype="fasta")
+            handle = Entrez.efetch(db=f"{chosen_entrez_database}", id=result["IdList"][0], rettype="gb")
+            self.query_translated = SeqIO.read(handle, 'genbank')
+            handle = Entrez.efetch(db=f"{chosen_entrez_database}", id=result["IdList"], rettype="gb")
+            self.query_result = handle.read()
 
             # sends query result to TextEdit below
-            self.ui.textEditQueryResult.setText(self.queryResult)
+            self.ui.textEditQueryResult.setText(self.query_result)
             handle.close()
-        except Exception as c:
-            # In case of incorrect file extension return error
-            QMessageBox.critical(self,'Error',f'Wrong query: {c}.\nTry to use another database for this query')
+        except Exception as e:
+            QMessageBox.critical(self, 'Error', f'Wrong query:\n{e}\nTry to use another database for this query.')
 
     def save_query_result_to_txt(self):
         """
         :return: saves data to .txt file
         """
         try:
-            if len(self.queryResult) > 0:
-                file,_ = QFileDialog.getSaveFileName(self, "Save file","","All files (*);;TXT files (*.txt)")
+            if len(self.query_result) > 0:
+                file, _ = QFileDialog.getSaveFileName(self, "Save file", "", "All files (*);;TXT files (*.txt)")
                 if file:
-                    saving = open(file,'w')
-                    saving.write(self.queryResult)
+                    saving = open(file, 'w')
+                    saving.write(self.query_result)
                     saving.close()
         except Exception as e:
-            # In case of incorrect file extension return error
-            QMessageBox.information(self, 'Info',f'No data to export. Please send query\n''to receive data')
+            QMessageBox.critical(self, 'Info', f'No data to export.\n{e}')
 
     def load_from_txt(self):
         """
         :return: loads data from .txt file
         """
         try:
-            file, _ = QFileDialog.getOpenFileName(self,"Open file","","All files (*);;TXT files (*.txt)")
+            file, _ = QFileDialog.getOpenFileName(self, "Open file", "", "All files (*);;TXT files (*.txt)")
             if file:
                 try:
                     self.ui.textEditQueryResult.clearFocus()
-                    with open(file,'r') as f:
+                    with open(file, 'r') as f:
                         data = f.read()
                     self.ui.textEditQueryResult.setText(data)
                     f.close()
                 except Exception as e:
-                    # In case of incorrect file extension return error
-                    QMessageBox.critical(self,'Error',f'Wrong file extension: {e}')
+                    QMessageBox.critical(self, 'Error', f'Wrong file extension: {e}')
         except Exception as e:
-            QMessageBox.show(self,'Info','Something went wrong. Try to load file again')
+            QMessageBox.critical(self, 'Error', f'Something went wrong. Try to load file again\n{e}')
 
-    ########################
-    ### Report generation
-    ########################
     def add_amino_percentage(self):
         """
         :return: generates plot with amino percentage from entrez query
         """
         try:
             data = []
-            nucleotides = ['A','T','C','G']
+            nucleotides = ['A', 'T', 'C', 'G']
             values = {}
             for nucleotide in nucleotides:
-                count = self.queryTranslated.seq.count(nucleotide)
+                count = self.query_translated.seq.count(nucleotide)
                 values[nucleotide] = count
             all = sum(list(values.values()))
             for i in values:
                 value = values[i]
-                percent = value/all*100
+                percent = value / all * 100
                 data.append(percent)
             explode = (0, 0.1, 0, 0)
             fig1, ax1 = plt.subplots()
             plot = ax1.pie(data, explode=explode, labels=nucleotides, autopct='%1.1f%%',
-                    shadow=True, startangle=90)
+                           shadow=True, startangle=90)
             ax1.axis('equal')
-            plt.title(f'Nucleotide percentage of {self.queryTranslated.annotations["organism"]}')
+            plt.title(f'Nucleotide percentage of {self.query_translated.annotations["organism"]}')
             plt.savefig('plot2.png')
-            PlotFile = 'plot2.png'
-            return PlotFile
+            plot_file = 'plot2.png'
+            return plot_file
         except Exception as e:
-            QMessageBox.critical(self,'Error',f'No data! {e}')
+            QMessageBox.critical(self, 'Error', f'No data! {e}')
 
     def generate_report(self):
         """
-        :return: Generates report as a .pdf extension file. Data: report id, date&time of report generation,
-                 entrez query results, plots: nucleotide percentage of organism from query
-                 and plot from MyPlotDialog class.
+        :return:
+        Generates report as a .pdf extension file. Data: report id, date&time of report generation,
+        entrez query results, plots: nucleotide percentage of organism from query
+        and plot from MyPlotDialog class.
         """
         try:
-            org_name = '_'.join(self.queryTranslated.annotations["organism"].split())
-            file, _ = QFileDialog.getSaveFileName(self, "Save file",f'{self.file_name_nocsv[0]}_{org_name}',
+            org_name = '_'.join(self.query_translated.annotations["organism"].split())
+            file, _ = QFileDialog.getSaveFileName(self, "Save file", f'{self.file_name_no_csv[0]}_{org_name}',
                                                   "All files (*);;PDF files (*.pdf)")
             if file:
                 doc = SimpleDocTemplate(file, pagesize=letter,
@@ -251,8 +249,9 @@ class MyForm(QMainWindow, QScrollArea):
                                         topMargin=25, bottomMargin=18)
                 logo = 'C:/Users/miko5/Desktop/TDS/genome-info/icons/dna_icon_132453.ico'
 
-                Story = []
-                img = reportlab.platypus.Image(filename = logo, height = 0.5 * inch, width = 0.5 * inch, hAlign='RIGHT')
+                story = []
+                logo_image = reportlab.platypus.Image(filename=logo, height=0.5 * inch, width=0.5 * inch,
+                                                      hAlign='RIGHT')
 
                 name = 'GenomeInfo'
                 report_id = f'Report ID: {uuid.uuid4()}'
@@ -260,58 +259,55 @@ class MyForm(QMainWindow, QScrollArea):
                 generation_date_and_time = now.strftime("%d/%m/%Y %H:%M:%S")
                 date = f'Date and time of report generation: {generation_date_and_time}'
                 result_txt = 'Result of Entrez query:'
-                result_info_1 = f'ID number: {self.queryTranslated.id}'
-                result_info_2 = f'Organism: {self.queryTranslated.annotations["organism"]}'
-                result_info_3 = f'Sequence: {self.queryTranslated.seq[:100]}...'
-                result_info_4 = f'Sequence length: {len(self.queryTranslated.seq)}'
-                result_info_5 = f'Description: {self.queryTranslated.description}'
-                information = [name,report_id,date,result_txt]
-                results = [result_info_1,result_info_2,result_info_3,result_info_4,result_info_5]
+                result_info_id = f'ID number: {self.query_translated.id}'
+                result_info_organism = f'Organism: {self.query_translated.annotations["organism"]}'
+                try:
+                    result_info_seq = f'Sequence: {self.query_translated.seq[:100]}...'
+                except Exception as e:
+                    QMessageBox.warning(self, 'Error',
+                                        f'Lack of access to organism\' sequence: {traceback.format_exc()}')
+                finally:
+                    result_info_seq = 'None'
+                result_info_seq_length = f'Sequence length: {len(self.query_translated.seq)}'
+                result_info_description = f'Description: {self.query_translated.description}'
+                information = [name, report_id, date, result_txt]
+                results = [result_info_id, result_info_organism, result_info_seq, result_info_seq_length,
+                           result_info_description]
                 notes = self.ui.textEditNoteForPlot.toPlainText()
 
-                Story.append(img)
+                story.append(logo_image)
                 styles = getSampleStyleSheet()
                 styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
 
                 for info in information:
-                    Story.append(Paragraph(info, styles["Normal"]))
-                    Story.append(Spacer(1, 12))
+                    story.append(Paragraph(info, styles["Normal"]))
+                    story.append(Spacer(1, 12))
 
                 for result in results:
-                    Story.append(Spacer(1, 12))
-                    Story.append(Paragraph(result, styles["Justify"]))
+                    story.append(Spacer(1, 12))
+                    story.append(Paragraph(result, styles["Justify"]))
 
-                Story.append(Spacer(1, 10))
+                story.append(Spacer(1, 10))
                 percentage_plot = self.add_amino_percentage()
-                img2 = reportlab.platypus.Image(percentage_plot,4*inch,3*inch,hAlign='LEFT')
-                Story.append(img2)
-                Story.append(Spacer(1, 1))
+                percentage_plot_image2 = reportlab.platypus.Image(percentage_plot, 4 * inch, 3 * inch, hAlign='LEFT')
+                story.append(percentage_plot_image2)
+                story.append(Spacer(1, 1))
 
-                img3 = reportlab.platypus.Image('plot.png', 4 * inch, 3 * inch, hAlign='LEFT')
-                Story.append(img3)
-                Story.append(Spacer(1, 2))
+                percentage_plot_image3 = reportlab.platypus.Image('plot.png', 4 * inch, 3 * inch, hAlign='LEFT')
+                story.append(percentage_plot_image3)
+                story.append(Spacer(1, 2))
 
-                Story.append(Paragraph(notes, styles["Normal"]))
-                doc.build(Story)
+                story.append(Paragraph(notes, styles["Normal"]))
+                doc.build(story)
         except Exception as e:
-            QMessageBox.critical(self,'Error',f'Something went wrong: {traceback.format_exc()}')
+            QMessageBox.critical(self, 'Error', f'Something went wrong: {e}')
 
-    def help(self):
-        """
-        :return: opens .pdf document "Help.pdf" with user guide
-        """
-        help_document = 'Help.pdf'
-        subprocess.Popen([help_document],shell=True)
-
-#################################################################
-### ThreadCLass - responsible for threading downloading
-#################################################################
 
 class ThreadClass(QtCore.QThread):
-
     any_signal = QtCore.pyqtSignal()
-    def __init__(self,parent = None, index = 0):
-        super(ThreadClass,self).__init__(parent)
+
+    def __init__(self, parent=None, index=0):
+        super(ThreadClass, self).__init__(parent)
         self.index = index
         self.isRunning = True
 
@@ -323,8 +319,9 @@ class ThreadClass(QtCore.QThread):
         print('Stoping thread', self.index)
         self.terminate()
 
+
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    w= MyForm()
+    w = MyForm()
     w.show()
     sys.exit(app.exec_())
