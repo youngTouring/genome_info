@@ -20,8 +20,15 @@ from plot_window import *
 from table_model import *
 from main_window_layout import *
 
+##############################################################################
+### MyForm class - application's main class. Responsible for exposing ########
+### database view, sending queries to Entrez database, saving data to ########
+### file, loading data from file, and exposing plot view from MyPlotDialog ###
+### class ####################################################################
+##############################################################################
 
 class MyForm(QMainWindow, QScrollArea):
+
     def __init__(self):
         super().__init__()
         self.ui = Ui_MainWindow()
@@ -321,3 +328,4 @@ if __name__ == "__main__":
     w = MyForm()
     w.show()
     sys.exit(app.exec_())
+
