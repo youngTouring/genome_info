@@ -8,9 +8,9 @@ import pandas as pd
 import reportlab.platypus
 from reportlab.lib.enums import TA_JUSTIFY
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import SimpleDocTemplate
 from Bio import Entrez, SeqIO, Seq
-from PyQt5.QtWidgets import QApplication, QTableWidgetItem, QMainWindow, QScrollArea, QFileDialog, QMessageBox, QLabel
+from PyQt5.QtWidgets import QApplication, QTableWidgetItem, QMainWindow, \
+    QScrollArea, QFileDialog, QMessageBox, QLabel
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
@@ -165,8 +165,6 @@ class MyForm(QMainWindow, QScrollArea):
             self.query_translated = SeqIO.read(handle, 'genbank')
             handle = Entrez.efetch(db=f"{chosen_entrez_database}", id=result["IdList"], rettype="gb")
             self.query_result = handle.read()
-
-            # sends query result to TextEdit below
             self.ui.textEditQueryResult.setText(self.query_result)
             handle.close()
         except Exception as e:
@@ -248,11 +246,9 @@ class MyForm(QMainWindow, QScrollArea):
                                         rightMargin=25, leftMargin=25,
                                         topMargin=25, bottomMargin=18)
                 logo = 'C:/Users/miko5/Desktop/TDS/genome-info/icons/dna_icon_132453.ico'
-
                 story = []
                 logo_image = reportlab.platypus.Image(filename=logo, height=0.5 * inch, width=0.5 * inch,
                                                       hAlign='RIGHT')
-
                 name = 'GenomeInfo'
                 report_id = f'Report ID: {uuid.uuid4()}'
                 now = datetime.datetime.now()

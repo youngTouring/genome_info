@@ -14,7 +14,6 @@ import sys
 ##################################################################
 
 class MyDialog(QDialog):
-
     def __init__(self):
         super().__init__()
         self.ui = Ui_Dialog()
@@ -25,7 +24,8 @@ class MyDialog(QDialog):
                                      'Eucaryota':eucaryotes,'Procaryota':procaryotes,
                                      'Viruses':viruses,'Plasmids':plasmids}
 
-    def download_csv(self,url,file) -> None:
+    @staticmethod
+    def download_csv(url,file) -> None:
         """
         :param url: address of database
         :param file: specififed file name by user
@@ -60,6 +60,7 @@ class MyDialog(QDialog):
         except Exception as e:
             '''In case of lack of internet connection return error'''
             QMessageBox.critical(self,'Error',f'Something went wrong. Check your internet connection: {e}')
+
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

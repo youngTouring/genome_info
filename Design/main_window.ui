@@ -462,8 +462,9 @@ background-color: rgb(249, 249, 249);</string>
        <enum>Qt::LeftToRight</enum>
       </property>
       <property name="styleSheet">
-       <string notr="true">font: 10pt &quot;Sitka Text&quot;;
-background-color: rgb(255, 255, 249)rgb(255, 255, 255);</string>
+       <string notr="true">font: 9pt &quot;MS Shell Dlg 2&quot;;
+background-color: rgb(255, 255, 255);
+border-color: rgb(255, 188, 154);</string>
       </property>
       <property name="frameShadow">
        <enum>QFrame::Plain</enum>
@@ -490,9 +491,9 @@ background-color: rgb(255, 255, 249)rgb(255, 255, 255);</string>
        <property name="geometry">
         <rect>
          <x>0</x>
-         <y>-290</y>
+         <y>0</y>
          <width>1057</width>
-         <height>1590</height>
+         <height>1575</height>
         </rect>
        </property>
        <layout class="QFormLayout" name="formLayout_2">
@@ -685,8 +686,8 @@ text-decoration: underline;</string>
           </property>
           <property name="font">
            <font>
-            <family>Sitka Text</family>
-            <pointsize>10</pointsize>
+            <family>MS Shell Dlg 2</family>
+            <pointsize>9</pointsize>
             <weight>50</weight>
             <italic>false</italic>
             <bold>false</bold>
@@ -1118,6 +1119,7 @@ text-decoration: underline;</string>
    </property>
    <property name="font">
     <font>
+     <strikeout>false</strikeout>
      <stylestrategy>PreferDefault</stylestrategy>
      <kerning>false</kerning>
     </font>
@@ -1142,6 +1144,9 @@ text-decoration: underline;</string>
    </property>
    <property name="shortcutVisibleInContextMenu">
     <bool>true</bool>
+   </property>
+   <property name="priority">
+    <enum>QAction::NormalPriority</enum>
    </property>
   </action>
   <action name="actionOpenDatabase">

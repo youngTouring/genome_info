@@ -147,6 +147,7 @@ class MyPlotDialog(QDialog,QMainWindow):
         except Exception as e:
             QMessageBox.critical(self,'Error',f'Something went wrong: {e}')
 
+
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     w = MyPlotDialog()
