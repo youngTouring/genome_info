@@ -28,6 +28,7 @@ class MyPlotDialog(QDialog, QMainWindow):
         self.ui.pushButtonAddData.clicked.connect(self.add_data)
         self.ui.pushButton.clicked.connect(self.delete_data)
         self.ui.pushButtonPasteElements.clicked.connect(self.paste_list)
+        self.ui.push_button_clear.clicked.connect(self.clear_search_data)
 
         self.data_from_database = pd.DataFrame()
         self.data_for_plot = pd.DataFrame()
@@ -38,6 +39,9 @@ class MyPlotDialog(QDialog, QMainWindow):
         self.header = []
         self.item = ''
         self.items = []
+
+    def clear_search_data(self):
+        self.ui.lineEditDataForPlot.clear()
 
     def clear_data(self):
         """
