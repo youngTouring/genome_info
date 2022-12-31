@@ -493,10 +493,52 @@ border-color: rgb(255, 188, 154);</string>
          <x>0</x>
          <y>0</y>
          <width>1057</width>
-         <height>1575</height>
+         <height>1546</height>
         </rect>
        </property>
        <layout class="QFormLayout" name="formLayout_2">
+        <item row="0" column="0" colspan="2">
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QLabel" name="labelDataName">
+            <property name="maximumSize">
+             <size>
+              <width>250</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Data view</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTableView" name="tableView">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>400</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>950</width>
+              <height>400</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 255, 255);</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
         <item row="1" column="0">
          <widget class="QLabel" name="labelDatabaseSizeInfo">
           <property name="minimumSize">
@@ -517,55 +559,13 @@ border-color: rgb(255, 188, 154);</string>
          </widget>
         </item>
         <item row="2" column="0">
-         <widget class="QLabel" name="labelDatabaseSizeInfo_2">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <family>Sitka Text</family>
-            <pointsize>12</pointsize>
-            <weight>9</weight>
-            <italic>false</italic>
-            <bold>false</bold>
-            <underline>true</underline>
-           </font>
-          </property>
-          <property name="layoutDirection">
-           <enum>Qt::LeftToRight</enum>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">font: 75 12pt &quot;Sitka Text&quot;;
-text-decoration: underline;</string>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Sunken</enum>
-          </property>
-          <property name="lineWidth">
-           <number>10</number>
-          </property>
-          <property name="text">
-           <string>Entrez query</string>
-          </property>
-          <property name="margin">
-           <number>0</number>
-          </property>
-          <property name="indent">
-           <number>200</number>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
          <widget class="Line" name="line_2">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
          </widget>
         </item>
-        <item row="4" column="0">
+        <item row="3" column="0">
          <widget class="QLabel" name="label_3">
           <property name="minimumSize">
            <size>
@@ -579,12 +579,21 @@ text-decoration: underline;</string>
             <height>30</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>MS Shell Dlg 2</family>
+            <pointsize>9</pointsize>
+            <weight>50</weight>
+            <italic>false</italic>
+            <bold>false</bold>
+           </font>
+          </property>
           <property name="text">
-           <string>Type in organism name or BioProject id:</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Type in organism name or BioProject id:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
-        <item row="5" column="0">
+        <item row="4" column="0">
          <layout class="QFormLayout" name="formLayout">
           <item row="0" column="0">
            <widget class="QLineEdit" name="lineEditSearchInDatabase">
@@ -632,7 +641,7 @@ text-decoration: underline;</string>
           </item>
          </layout>
         </item>
-        <item row="6" column="0">
+        <item row="5" column="0">
          <widget class="QLabel" name="label_2">
           <property name="minimumSize">
            <size>
@@ -647,11 +656,11 @@ text-decoration: underline;</string>
            </size>
           </property>
           <property name="text">
-           <string>Selected data view:</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Selected data view:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
-        <item row="7" column="0">
+        <item row="6" column="0">
          <widget class="QTableWidget" name="tableWidgetSelectedData">
           <property name="minimumSize">
            <size>
@@ -670,7 +679,7 @@ text-decoration: underline;</string>
           </property>
          </widget>
         </item>
-        <item row="8" column="0">
+        <item row="7" column="0">
          <widget class="QLabel" name="labelNumbeOfRows">
           <property name="minimumSize">
            <size>
@@ -698,7 +707,7 @@ text-decoration: underline;</string>
           </property>
          </widget>
         </item>
-        <item row="9" column="0">
+        <item row="8" column="0">
          <widget class="QLabel" name="label">
           <property name="minimumSize">
            <size>
@@ -713,11 +722,11 @@ text-decoration: underline;</string>
            </size>
           </property>
           <property name="text">
-           <string>Select BioProject/Assembly/Organism name for query:</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Select BioProject/Assembly/Organism name for query:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
-        <item row="10" column="0">
+        <item row="9" column="0">
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
            <widget class="QLineEdit" name="lineEditSelectedForQuery">
@@ -782,7 +791,7 @@ text-decoration: underline;</string>
           </item>
          </layout>
         </item>
-        <item row="11" column="0">
+        <item row="10" column="0">
          <widget class="QLabel" name="label_5">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -792,7 +801,7 @@ text-decoration: underline;</string>
           </property>
           <property name="minimumSize">
            <size>
-            <width>300</width>
+            <width>350</width>
             <height>30</height>
            </size>
           </property>
@@ -803,11 +812,11 @@ text-decoration: underline;</string>
            </size>
           </property>
           <property name="text">
-           <string>Your e-mail address for entrez:</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Your e-mail address for entrez:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
-        <item row="12" column="0">
+        <item row="11" column="0">
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
            <widget class="QLineEdit" name="lineEditEntrezEmail">
@@ -858,11 +867,11 @@ text-decoration: underline;</string>
           </item>
          </layout>
         </item>
-        <item row="13" column="0">
+        <item row="12" column="0">
          <widget class="QLabel" name="label_4">
           <property name="minimumSize">
            <size>
-            <width>150</width>
+            <width>350</width>
             <height>30</height>
            </size>
           </property>
@@ -873,11 +882,11 @@ text-decoration: underline;</string>
            </size>
           </property>
           <property name="text">
-           <string>Query result:</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Query result:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
-        <item row="14" column="0">
+        <item row="13" column="0">
          <widget class="Line" name="line">
           <property name="minimumSize">
            <size>
@@ -896,7 +905,7 @@ text-decoration: underline;</string>
           </property>
          </widget>
         </item>
-        <item row="15" column="0">
+        <item row="14" column="0">
          <widget class="QTextEdit" name="textEditQueryResult">
           <property name="minimumSize">
            <size>
@@ -921,7 +930,7 @@ text-decoration: underline;</string>
           </property>
          </widget>
         </item>
-        <item row="16" column="0">
+        <item row="15" column="0">
          <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>
            <widget class="QPushButton" name="pushButtonExportToTxt">
@@ -975,7 +984,7 @@ text-decoration: underline;</string>
           </item>
          </layout>
         </item>
-        <item row="17" column="0">
+        <item row="16" column="0">
          <widget class="QLabel" name="labelPlottoWorkspace">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -988,17 +997,7 @@ text-decoration: underline;</string>
           </property>
          </widget>
         </item>
-        <item row="19" column="0">
-         <layout class="QVBoxLayout" name="verticalLayout_4"/>
-        </item>
-        <item row="20" column="0">
-         <widget class="QLabel" name="labelNotesForPlot">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="18" column="0" colspan="2">
+        <item row="17" column="0" colspan="2">
          <widget class="QTextEdit" name="textEditNoteForPlot">
           <property name="maximumSize">
            <size>
@@ -1014,47 +1013,15 @@ text-decoration: underline;</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="0" colspan="2">
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <widget class="QLabel" name="labelDataName">
-            <property name="maximumSize">
-             <size>
-              <width>250</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Data view</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QTableView" name="tableView">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>400</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>950</width>
-              <height>400</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">background-color: rgb(255, 255, 255);</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+        <item row="18" column="0">
+         <layout class="QVBoxLayout" name="verticalLayout_4"/>
+        </item>
+        <item row="19" column="0">
+         <widget class="QLabel" name="labelNotesForPlot">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
