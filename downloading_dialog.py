@@ -1,11 +1,13 @@
+import sys
+
 from PyQt5.QtWidgets import QDialog, QApplication, QTableWidgetItem, QTableWidget
 from PyQt5.QtCore import QThread
+import requests
+import csv
+
 from downloading_dialog_layout import *
 from main_window import *
 from addresses import *
-import requests
-import csv
-import sys
 
 ##################################################################
 ### MyDialog class - instantiation in application's main class.

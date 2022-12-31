@@ -1,13 +1,14 @@
+import sys
+
 from PyQt5.QtWidgets import QDialog, QMessageBox, QMainWindow, QInputDialog, QListWidgetItem
 from PyQt5.QtGui import QPainter, QPixmap
-from plot_window_layout import *
 import matplotlib.pyplot as plt
-from main_window import *
 import seaborn as sns
 import pandas as pd
 import numpy as np
-import sys
 
+from plot_window_layout import *
+from main_window import *
 
 #################################################################
 ### MyPlotDialog class - instantiation in application's main class.
