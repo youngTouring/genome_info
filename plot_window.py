@@ -7,7 +7,7 @@ import seaborn as sns
 import pandas as pd
 import numpy as np
 
-from plot_window_layout import *
+from layout.plot_window_layout import *
 from main_window import *
 
 #################################################################

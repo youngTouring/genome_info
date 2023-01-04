@@ -18,7 +18,7 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
 from downloading_dialog import *
 from plot_window import *
 from table_model import *
-from main_window_layout import *
+from layout.main_window_layout import *
 
 ##############################################################################
 ### MyForm class - application's main class. Responsible for exposing ########
