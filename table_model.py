@@ -1,4 +1,3 @@
-'''Import libraries'''
 from PyQt5.QtCore import Qt, QAbstractTableModel
 import pandas as pd
 
