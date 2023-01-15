@@ -9,13 +9,8 @@ from layout.downloading_dialog_layout import *
 from main_window import *
 from addresses import *
 
-##################################################################
-### MyDialog class - instantiation in application's main class.
-### Responsible for downloading chosen Genome database from NCBI:
-### oganelles, procaryota, eucaryota, viruses, plasmids, overview
-##################################################################
 
-class MyDialog(QDialog):
+class DownloadDialog(QDialog):
     def __init__(self):
         super().__init__()
         self.ui = Ui_Dialog()
@@ -66,6 +61,6 @@ class MyDialog(QDialog):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    w = MyDialog()
+    w = DownloadDialog()
     w.show()
     sys.exit(app.exec_())

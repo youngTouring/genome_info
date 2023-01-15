@@ -20,15 +20,8 @@ from plot_window import *
 from table_model import *
 from layout.main_window_layout import *
 
-##############################################################################
-### MyForm class - application's main class. Responsible for exposing ########
-### database view, sending queries to Entrez database, saving data to ########
-### file, loading data from file, and exposing plot view from MyPlotDialog ###
-### class ####################################################################
-##############################################################################
 
-class MyForm(QMainWindow, QScrollArea):
-
+class MainWindowForm(QMainWindow, QScrollArea):
     def __init__(self):
         super().__init__()
         self.ui = Ui_MainWindow()
@@ -49,8 +42,8 @@ class MyForm(QMainWindow, QScrollArea):
         self.query_result = ''
         self.query_translated = ''
         self.data_loaded = False
-        self.dialog = MyDialog()
-        self.plot_creator = MyPlotDialog()
+        self.dialog = DownloadDialog()
+        self.plot_creator = PlotDialog()
         self.plot_creator.ui.pushButtonAddToWorkspace.clicked.connect(self.add_chart_to_workspace)
         self.file_name_no_csv = ''
         self.thread = {}
@@ -107,7 +100,7 @@ class MyForm(QMainWindow, QScrollArea):
                 self.df_new.insert(0, 'Index', [i for i in range(1, self.df_new.shape[0] + 1)], True)
                 self.data_loaded = True
                 num_rows, num_cols = self.df_new.shape
-                data_tab = TabelaModel(self.df_new)
+                data_tab = TabelModel(self.df_new)
                 self.ui.tableView.setModel(data_tab)
                 file_name = str(file).split('/')
                 self.file_name_no_csv = file_name[-1].split('.')
@@ -242,7 +235,7 @@ class MyForm(QMainWindow, QScrollArea):
         :return:
         Generates report as a .pdf extension file. Data: report id, date&time of report generation,
         entrez query results, plots: nucleotide percentage of organism from query
-        and plot from MyPlotDialog class.
+        and plot from PlotDialog class.
         """
         try:
             org_name = '_'.join(self.query_translated.annotations["organism"].split())
@@ -325,6 +318,6 @@ class ThreadClass(QtCore.QThread):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    w = MyForm()
+    w = MainWindowForm()
     w.show()
     sys.exit(app.exec_())

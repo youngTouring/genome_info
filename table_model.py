@@ -1,13 +1,7 @@
-'''Import libraries'''
 from PyQt5.QtCore import Qt, QAbstractTableModel
-import pandas as pd
 
-#####################################################
-### TabelaModel class - responsible for reading data
-### from .csv file and viewing it in the table
-#####################################################
 
-class TabelaModel(QAbstractTableModel):
+class TabelModel(QAbstractTableModel):
     def __init__(self, data):
         super().__init__()
         self._data = data

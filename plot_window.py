@@ -10,13 +10,8 @@ import numpy as np
 from layout.plot_window_layout import *
 from main_window import *
 
-#################################################################
-### MyPlotDialog class - instantiation in application's main class.
-### Responsible for plotting data from database, previosuly loaded
-### to main table.
-#################################################################
 
-class MyPlotDialog(QDialog, QMainWindow):
+class PlotDialog(QDialog, QMainWindow):
     def __init__(self):
         super().__init__()
         self.ui = Ui_Dialog2()
@@ -152,6 +147,6 @@ class MyPlotDialog(QDialog, QMainWindow):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    w = MyPlotDialog()
+    w = PlotDialog()
     w.show()
     sys.exit(app.exec_())
