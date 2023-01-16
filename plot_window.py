@@ -27,7 +27,7 @@ class PlotDialog(QDialog, QMainWindow):
 
         self.data_from_database = pd.DataFrame()
         self.data_for_plot = pd.DataFrame()
-        self.dataNames = ['Size(Mb)', 'GC%', 'Scaffolds', 'CDS', 'Chromosomes', 'Organelles', 'Assemblies', 'Plasmids']
+        self.data_names = ['Size(Mb)', 'GC%', 'Scaffolds', 'CDS', 'Chromosomes', 'Organelles', 'Assemblies', 'Plasmids']
         self.data = pd.DataFrame()
         self.tab = []
         self.tab_concat = []
@@ -126,12 +126,12 @@ class PlotDialog(QDialog, QMainWindow):
             organism_names_for_plot = self.data_for_plot['Organism_name'].tolist()
             headers_names = self.data_for_plot.columns.values.tolist()
             values_to_convert = []
-            for i in headers_names:
-                for j in self.dataNames:
-                    if i == j:
-                        values_to_convert.append(i)
-            for i in values_to_convert:
-                self.data_for_plot[i] = self.data_for_plot[i].astype(float)
+            for header in headers_names:
+                for name in self.data_names:
+                    if header == name:
+                        values_to_convert.append(header)
+            for value in values_to_convert:
+                self.data_for_plot[value] = self.data_for_plot[value].astype(float)
             data_plot = self.data_for_plot[values_to_convert]
             data_plot.insert(0, 'Organism_name', organism_names_for_plot, True)
             data_plot['Size(Kb)'] = data_plot['Size(Mb)'] * 1000

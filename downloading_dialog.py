@@ -39,7 +39,7 @@ class DownloadDialog(QDialog):
         """
         :return: dowloads chosen database
         """
-        # self.thread[1] = ThreadClass(parent = None, index = 1)
+        # self.thread[1] = ThreadManager(parent = None, index = 1)
         # self.thread[1].start()
         self.ui.labelDownloadedInfo.clear()
         try:
@@ -53,7 +53,8 @@ class DownloadDialog(QDialog):
                 self.ui.labelDownloadedInfo.setText(f'{self.ui.comboBoxDatabases.itemText(self.ui.comboBoxDatabases.currentIndex())} database'
                                                     f' successfully downloaded')
             else:
-                self.thread[1].stop()
+                # self.thread[1].stop()
+                pass
         except Exception as e:
             '''In case of lack of internet connection return error'''
             QMessageBox.critical(self,'Error',f'Something went wrong. Check your internet connection: {e}')

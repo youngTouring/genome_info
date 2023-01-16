@@ -21,7 +21,7 @@ from table_model import *
 from layout.main_window_layout import *
 
 
-class MainWindowForm(QMainWindow, QScrollArea):
+class GenomeInfo(QMainWindow, QScrollArea):
     def __init__(self):
         super().__init__()
         self.ui = Ui_MainWindow()
@@ -214,9 +214,9 @@ class MainWindowForm(QMainWindow, QScrollArea):
                 count = self.query_translated.seq.count(nucleotide)
                 values[nucleotide] = count
             all = sum(list(values.values()))
-            for i in values:
-                value = values[i]
-                percent = value / all * 100
+            for value in values:
+                specific_amount = values[value]
+                percent = specific_amount / all * 100
                 data.append(percent)
             explode = (0, 0.1, 0, 0)
             fig1, ax1 = plt.subplots()
@@ -299,11 +299,11 @@ class MainWindowForm(QMainWindow, QScrollArea):
             QMessageBox.critical(self, 'Error', f'Something went wrong: {e}')
 
 
-class ThreadClass(QtCore.QThread):
+class ThreadManager(QtCore.QThread):
     any_signal = QtCore.pyqtSignal()
 
     def __init__(self, parent=None, index=0):
-        super(ThreadClass, self).__init__(parent)
+        super(ThreadManager, self).__init__(parent)
         self.index = index
         self.isRunning = True
 
@@ -318,6 +318,6 @@ class ThreadClass(QtCore.QThread):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    w = MainWindowForm()
+    w = GenomeInfo()
     w.show()
     sys.exit(app.exec_())
